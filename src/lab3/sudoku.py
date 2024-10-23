@@ -40,27 +40,13 @@ def group(values: tp.List[T], n: int) -> tp.List[tp.List[T]]:
 
 
 def get_row(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -> tp.List[str]:
-    """Возвращает все значения для номера строки, указанной в pos
-    >>> get_row([['1', '2', '.'], ['4', '5', '6'], ['7', '8', '9']], (0, 0))
-    ['1', '2', '.']
-    >>> get_row([['1', '2', '3'], ['4', '.', '6'], ['7', '8', '9']], (1, 0))
-    ['4', '.', '6']
-    >>> get_row([['1', '2', '3'], ['4', '5', '6'], ['.', '8', '9']], (2, 0))
-    ['.', '8', '9']
-    """
-    pass
+    row = grid[pos[0]]
+    return row
 
 
 def get_col(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -> tp.List[str]:
-    """Возвращает все значения для номера столбца, указанного в pos
-    >>> get_col([['1', '2', '.'], ['4', '5', '6'], ['7', '8', '9']], (0, 0))
-    ['1', '4', '7']
-    >>> get_col([['1', '2', '3'], ['4', '.', '6'], ['7', '8', '9']], (0, 1))
-    ['2', '.', '8']
-    >>> get_col([['1', '2', '3'], ['4', '5', '6'], ['.', '8', '9']], (0, 2))
-    ['3', '6', '9']
-    """
-    pass
+    col = [grid[i][pos[1]] for i in range(len(grid))]
+    return col
 
 
 def get_block(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -> tp.List[str]:
@@ -147,11 +133,12 @@ def generate_sudoku(N: int) -> tp.List[tp.List[str]]:
 
 
 if __name__ == "__main__":
-    for fname in ["puzzle1.txt", "puzzle2.txt", "puzzle3.txt"]:
-        grid = read_sudoku(fname)
-        display(grid)
-        solution = solve(grid)
-        if not solution:
-            print(f"Puzzle {fname} can't be solved")
-        else:
-            display(solution)
+    print(get_col([['1', '2', '.'], ['4', '5', '6'], ['7', '8', '9']], (0, 0)))
+    #for fname in ["puzzle1.txt", "puzzle2.txt", "puzzle3.txt"]:
+    #    grid = read_sudoku(fname)
+    #    display(grid)
+    #    solution = solve(grid)
+    #    if not solution:
+    #        print(f"Puzzle {fname} can't be solved")
+    #    else:
+    #        display(solution)
