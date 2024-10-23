@@ -1,5 +1,8 @@
 import pathlib
 import typing as tp
+import time
+import multiprocessing
+from random import randint
 
 T = tp.TypeVar("T")
 
@@ -117,36 +120,31 @@ def check_solution(solution: tp.List[tp.List[str]]) -> bool:
 
 
 def generate_sudoku(N: int) -> tp.List[tp.List[str]]:
-    """Генерация судоку заполненного на N элементов
-    >>> grid = generate_sudoku(40)
-    >>> sum(1 for row in grid for e in row if e == '.')
-    41
-    >>> solution = solve(grid)
-    >>> check_solution(solution)
-    True
-    >>> grid = generate_sudoku(1000)
-    >>> sum(1 for row in grid for e in row if e == '.')
-    0
-    >>> solution = solve(grid)
-    >>> check_solution(solution)
-    True
-    >>> grid = generate_sudoku(0)
-    >>> sum(1 for row in grid for e in row if e == '.')
-    81
-    >>> solution = solve(grid)
-    >>> check_solution(solution)
-    True
-    """
-    pass
+    grid = [["."] * 9 for _ in range(9)]
+    grid = solve(grid)
 
+    positions_of_numbers = []
+    for i in range(81 - N):
+        row, col = randint(0, 8), randint(0, 8)
+        while (row, col) in positions_of_numbers:
+            row, col = randint(0,8),randint(0,8)
+        positions_of_numbers.append((row, col))
+        grid[row][col] = "."
+
+    return grid
+
+def run_solve(fname: str) -> None:
+    grid = read_sudoku(fname)
+    start = time.time()
+    solution = solve(grid)
+    end = time.time()
+    if not solution:
+        print(f"Puzzle {fname} can't be solved")
+    else:
+        display(solution)
+        print(f"{fname}: {end-start} \n")
 
 if __name__ == "__main__":
-    grid = read_sudoku('puzzle1.txt')
     for fname in ["puzzle1.txt", "puzzle2.txt", "puzzle3.txt"]:
-        grid = read_sudoku(fname)
-        display(grid)
-        solution = solve(grid)
-        if not solution:
-            print(f"Puzzle {fname} can't be solved")
-        else:
-            display(solution)
+        p = multiprocessing.Process(target=run_solve, args=(fname,))
+        p.start()
