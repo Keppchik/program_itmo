@@ -56,29 +56,19 @@ def get_block(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -> tp.List[s
     return block
 
 
-def find_empty_positions(grid: tp.List[tp.List[str]]) -> tp.Optional[tp.Tuple[int, int]]:
-    """Найти первую свободную позицию в пазле
-    >>> find_empty_positions([['1', '2', '.'], ['4', '5', '6'], ['7', '8', '9']])
-    (0, 2)
-    >>> find_empty_positions([['1', '2', '3'], ['4', '.', '6'], ['7', '8', '9']])
-    (1, 1)
-    >>> find_empty_positions([['1', '2', '3'], ['4', '5', '6'], ['.', '8', '9']])
-    (2, 0)
-    """
-    pass
+def find_empty_position(grid: tp.List[tp.List[str]]) -> tp.Optional[tp.Tuple[int, int]]:
+    for row in range(len(grid)):
+        for col in range(len(grid[row])):
+            if grid[row][col] == ".":
+                return row, col
 
 
 def find_possible_values(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -> tp.Set[str]:
-    """Вернуть множество возможных значения для указанной позиции
-    >>> grid = read_sudoku('puzzle1.txt')
-    >>> values = find_possible_values(grid, (0,2))
-    >>> values == {'1', '2', '4'}
-    True
-    >>> values = find_possible_values(grid, (4,7))
-    >>> values == {'2', '5', '9'}
-    True
-    """
-    pass
+    possible_values = set()
+    for value in "123456789":
+        if value not in get_row(grid, pos) and value not in get_col(grid, pos) and value not in get_block(grid, pos):
+            possible_values.add(value)
+    return possible_values
 
 
 def solve(grid: tp.List[tp.List[str]]) -> tp.Optional[tp.List[tp.List[str]]]:
@@ -128,7 +118,7 @@ def generate_sudoku(N: int) -> tp.List[tp.List[str]]:
 
 if __name__ == "__main__":
     grid = read_sudoku('puzzle1.txt')
-    print(get_block(grid, (0, 1)))
+    print(find_possible_values(grid, (4,7)))
     #for fname in ["puzzle1.txt", "puzzle2.txt", "puzzle3.txt"]:
     #    grid = read_sudoku(fname)
     #    display(grid)

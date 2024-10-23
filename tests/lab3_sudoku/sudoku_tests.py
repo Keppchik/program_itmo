@@ -21,3 +21,13 @@ class SudokuTestCase(unittest.TestCase):
         self.assertEquals(get_block(grid, (0, 1)), ['5', '3', '.', '6', '.', '.', '.', '9', '8'])
         self.assertEquals(get_block(grid, (4,7)),['.', '.', '3', '.', '.', '1', '.', '.', '6'])
         self.assertEquals(get_block(grid, (8, 8)),['2', '8', '.', '.', '.', '5', '.', '7', '9'])
+
+    def test_func_find_empty_position(self):
+        self.assertEquals(find_empty_position([['1', '2', '.'], ['4', '5', '6'], ['7', '8', '9']]), (0, 2))
+        self.assertEquals(find_empty_position([['1', '2', '3'], ['4', '.', '6'], ['7', '8', '9']]), (1, 1))
+        self.assertEquals(find_empty_position([['1', '2', '3'], ['4', '5', '6'], ['.', '8', '9']]), (2, 0))
+
+    def test_func_find_possible_values(self):
+        grid = read_sudoku("test_puzzle.txt")
+        self.assertEquals(find_possible_values(grid, (0, 2)),{'1', '2', '4'})
+        self.assertEquals(find_possible_values(grid, (4, 7)), {'2', '5', '9'})
