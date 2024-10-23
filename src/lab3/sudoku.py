@@ -20,6 +20,10 @@ def create_grid(puzzle: str) -> tp.List[tp.List[str]]:
 
 def display(grid: tp.List[tp.List[str]]) -> None:
     """Вывод Судоку """
+    if grid == "No solutions":
+        print("No solutions")
+        return None
+
     width = 2
     line = "+".join(["-" * (width * 3)] * 3)
     for row in range(9):
@@ -72,24 +76,44 @@ def find_possible_values(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -
 
 
 def solve(grid: tp.List[tp.List[str]]) -> tp.Optional[tp.List[tp.List[str]]]:
-    """ Решение пазла, заданного в grid """
-    """ Как решать Судоку?
-        1. Найти свободную позицию
-        2. Найти все возможные значения, которые могут находиться на этой позиции
-        3. Для каждого возможного значения:
-            3.1. Поместить это значение на эту позицию
-            3.2. Продолжить решать оставшуюся часть пазла
-    >>> grid = read_sudoku('puzzle1.txt')
-    >>> solve(grid)
-    [['5', '3', '4', '6', '7', '8', '9', '1', '2'], ['6', '7', '2', '1', '9', '5', '3', '4', '8'], ['1', '9', '8', '3', '4', '2', '5', '6', '7'], ['8', '5', '9', '7', '6', '1', '4', '2', '3'], ['4', '2', '6', '8', '5', '3', '7', '9', '1'], ['7', '1', '3', '9', '2', '4', '8', '5', '6'], ['9', '6', '1', '5', '3', '7', '2', '8', '4'], ['2', '8', '7', '4', '1', '9', '6', '3', '5'], ['3', '4', '5', '2', '8', '6', '1', '7', '9']]
-    """
-    pass
+    pos = find_empty_position(grid)
+
+    if pos is None:
+        return grid
+
+    values = find_possible_values(grid, pos)
+
+    if values == set():
+        return "No solutions"
+
+    for value in values:
+        grid[pos[0]][pos[1]] = value
+        if solve(grid) == "No solutions":
+            pass
+        else:
+            return grid
+        grid[pos[0]][pos[1]] = "."
+
+    return "No solutions"
 
 
 def check_solution(solution: tp.List[tp.List[str]]) -> bool:
-    """ Если решение solution верно, то вернуть True, в противном случае False """
-    # TODO: Add doctests with bad puzzles
-    pass
+    for i in range(9):
+        row = get_row(solution, (i,0))
+        col = get_col(solution, (0,i))
+        for number in "123456789":
+            if number in row and number in col:
+                pass
+            else:
+                return False
+        for j in range(0,9,3):
+            block = get_block(solution, (i,j))
+            for number in "123456789":
+                if number in block:
+                    pass
+                else:
+                    return False
+    return True
 
 
 def generate_sudoku(N: int) -> tp.List[tp.List[str]]:
@@ -118,12 +142,11 @@ def generate_sudoku(N: int) -> tp.List[tp.List[str]]:
 
 if __name__ == "__main__":
     grid = read_sudoku('puzzle1.txt')
-    print(find_possible_values(grid, (4,7)))
-    #for fname in ["puzzle1.txt", "puzzle2.txt", "puzzle3.txt"]:
-    #    grid = read_sudoku(fname)
-    #    display(grid)
-    #    solution = solve(grid)
-    #    if not solution:
-    #        print(f"Puzzle {fname} can't be solved")
-    #    else:
-    #        display(solution)
+    for fname in ["puzzle1.txt", "puzzle2.txt", "puzzle3.txt"]:
+        grid = read_sudoku(fname)
+        display(grid)
+        solution = solve(grid)
+        if not solution:
+            print(f"Puzzle {fname} can't be solved")
+        else:
+            display(solution)
