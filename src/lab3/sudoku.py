@@ -50,16 +50,10 @@ def get_col(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -> tp.List[str
 
 
 def get_block(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -> tp.List[str]:
-    """Возвращает все значения из квадрата, в который попадает позиция pos
-    >>> grid = read_sudoku('puzzle1.txt')
-    >>> get_block(grid, (0, 1))
-    ['5', '3', '.', '6', '.', '.', '.', '9', '8']
-    >>> get_block(grid, (4, 7))
-    ['.', '.', '3', '.', '.', '1', '.', '.', '6']
-    >>> get_block(grid, (8, 8))
-    ['2', '8', '.', '.', '.', '5', '.', '7', '9']
-    """
-    pass
+    row = (pos[0]//3) * 3
+    col = (pos[1]//3) * 3
+    block = [grid[row+i][col+j] for i in range(3) for j in range(3)]
+    return block
 
 
 def find_empty_positions(grid: tp.List[tp.List[str]]) -> tp.Optional[tp.Tuple[int, int]]:
@@ -133,7 +127,8 @@ def generate_sudoku(N: int) -> tp.List[tp.List[str]]:
 
 
 if __name__ == "__main__":
-    print(get_col([['1', '2', '.'], ['4', '5', '6'], ['7', '8', '9']], (0, 0)))
+    grid = read_sudoku('puzzle1.txt')
+    print(get_block(grid, (0, 1)))
     #for fname in ["puzzle1.txt", "puzzle2.txt", "puzzle3.txt"]:
     #    grid = read_sudoku(fname)
     #    display(grid)
