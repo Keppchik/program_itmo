@@ -68,8 +68,8 @@ def get_block(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -> tp.List[s
 
 def find_empty_position(grid: tp.List[tp.List[str]]) -> tp.Optional[tp.Tuple[int, int]]:
     """Находит первую позицию точки"""
-    for row in range(9):
-        for col in range(9):
+    for row in range(len(grid)):
+        for col in range(len(grid[row])):
             if grid[row][col] == ".":
                 return row, col
     return None
