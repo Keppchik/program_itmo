@@ -36,7 +36,7 @@ class RecommendedFilm:
             films = []
             for line in file.readlines():
                 if line.strip():
-                    film_id, name = line.split(",")
+                    film_id, name = line.strip().split(",")
                     films.append(Film(film_id, name))
         self.films = {film.film_id: film.name for film in films}
 
@@ -78,12 +78,52 @@ class RecommendedFilm:
             return self.films[recommended_film_id]
         return "Нет рекомендованного для вас фильма"
 
+    def recommended_film_by_value(self, user_history):
+        """Находит рекомендованный фильм среди всех пользователей, которые посмотрели наибольшее количество фильмов из истории пользователя"""
+
+        user_history = set(user_history.split(","))
+        simular_persons = []
+        for person in self.persons:
+            same_history = set(person.history) & user_history
+            if len(same_history) >= (len(user_history) / 2):
+                value = len(same_history) / len(user_history)
+                simular_persons.append((person,value))
+        simular_persons.sort(key=lambda x: x[1], reverse=True)
+
+        if simular_persons:
+            good_films = [set(simular_persons[0][0].history) - user_history]
+            for i in range(1,len(simular_persons)):
+                if simular_persons[i][1] == simular_persons[i-1][1]:
+                    good_films[-1] = good_films[-1] | (set(simular_persons[i][0].history) - user_history)
+                else:
+                    good_films.append((set(simular_persons[i][0].history) - user_history))
+
+            recommended_films = [0] * (len(self.films) + 1)
+            for film_set in good_films:
+                if film_set != set():
+                    for film in film_set:
+                        for person in self.persons:
+                            for watched_film in person.history:
+                                if watched_film == film:
+                                    recommended_films[int(film)] += 1
+                    recommended_film_id = str(recommended_films.index(max(recommended_films)))
+                    return self.films[recommended_film_id]
+
+        return "Нет рекомендованного для вас фильма"
+
 
 if __name__ == "__main__":
     FILMS_PATH = "texts/films.txt"
     HISTORY_PATH = "texts/history.txt"
 
-    USER_HISTORY = str(input())
-    recommended_film = RecommendedFilm(FILMS_PATH, HISTORY_PATH).recommended_film(USER_HISTORY)
+    while True:
+        USER_HISTORY = str(input())
+        if USER_HISTORY.replace(",","").isdigit():
+            break
 
-    print(recommended_film)
+    recommendedFilm = RecommendedFilm(FILMS_PATH, HISTORY_PATH)
+
+    film = recommendedFilm.recommended_film(USER_HISTORY)
+    film_by_value = recommendedFilm.recommended_film_by_value(USER_HISTORY)
+    print(f"Рекомендованный фильм - {film}")
+    print(f"Рекомендованный фильм по значению - {film_by_value}")
