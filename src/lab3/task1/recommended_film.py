@@ -46,8 +46,9 @@ class RecommendedFilm:
         with open(filepath, "r", encoding="utf-8") as file:
             for i, films in enumerate(file.readlines()):
                 films = films.strip().split(",")
-                person_id = i + 1
-                self.persons.append(Person(person_id, films))
+                if films != ['']:
+                    person_id = i + 1
+                    self.persons.append(Person(person_id, films))
 
     def recommended_film(self, user_history):
         """Находит рекомендованный фильм для пользователя на основе его истории просмотров по алгоритму:
