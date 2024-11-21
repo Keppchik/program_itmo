@@ -46,7 +46,7 @@ class RecommendedFilm:
         with open(filepath, "r", encoding="utf-8") as file:
             for i, films in enumerate(file.readlines()):
                 films = films.strip().split(",")
-                if films != ['']:
+                if films != [""]:
                     person_id = i + 1
                     self.persons.append(Person(person_id, films))
 
@@ -88,13 +88,13 @@ class RecommendedFilm:
             same_history = set(person.history) & user_history
             if len(same_history) >= (len(user_history) / 2):
                 value = len(same_history) / len(user_history)
-                simular_persons.append((person,value))
+                simular_persons.append((person, value))
         simular_persons.sort(key=lambda x: x[1], reverse=True)
 
         if simular_persons:
             good_films = [set(simular_persons[0][0].history) - user_history]
-            for i in range(1,len(simular_persons)):
-                if simular_persons[i][1] == simular_persons[i-1][1]:
+            for i in range(1, len(simular_persons)):
+                if simular_persons[i][1] == simular_persons[i - 1][1]:
                     good_films[-1] = good_films[-1] | (set(simular_persons[i][0].history) - user_history)
                 else:
                     good_films.append((set(simular_persons[i][0].history) - user_history))
@@ -119,7 +119,7 @@ if __name__ == "__main__":
 
     while True:
         USER_HISTORY = str(input())
-        if USER_HISTORY.replace(",","").isdigit():
+        if USER_HISTORY.replace(",", "").isdigit():
             break
 
     recommendedFilm = RecommendedFilm(FILMS_PATH, HISTORY_PATH)
