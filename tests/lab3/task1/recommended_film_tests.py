@@ -15,32 +15,28 @@ class RecommendedFilmTestCase(unittest.TestCase):
         self.assertEquals(self.recommendedFilm.persons[0].history, ['2','1','3'])
         self.assertEquals(self.recommendedFilm.persons[2].history, ['2','2','2','2','2','3'])
 
-    def test_func_recommended_film1(self):
+    def test_func_recommended_film(self):
         user_input = "2,3"
         recommended_film = self.recommendedFilm.recommended_film(user_input)
         self.assertEquals(recommended_film, "Мстители: Финал")
 
-    def test_func_recommended_film2(self):
         user_input = "3,4"
         recommended_film = self.recommendedFilm.recommended_film(user_input)
         self.assertEquals(recommended_film, "Хатико")
 
-    def test_func_recommended_film3(self):
         user_input = "5,6"
         recommended_film = self.recommendedFilm.recommended_film(user_input)
         self.assertEquals(recommended_film, "Нет рекомендованного для вас фильма")
 
-    def test_func_recommended_film_by_value1(self):
+    def test_func_recommended_film_by_value(self):
         user_input = "2,3"
         recommended_film = self.recommendedFilm.recommended_film_by_value(user_input)
         self.assertEquals(recommended_film, "Мстители: Финал")
 
-    def test_func_recommended_film_by_value2(self):
         user_input = "1,4"
         recommended_film = self.recommendedFilm.recommended_film_by_value(user_input)
         self.assertEquals(recommended_film, "Дюна")
 
-    def test_func_recommended_film_by_value3(self):
         user_input = "5,6"
         recommended_film = self.recommendedFilm.recommended_film_by_value(user_input)
         self.assertEquals(recommended_film, "Нет рекомендованного для вас фильма")

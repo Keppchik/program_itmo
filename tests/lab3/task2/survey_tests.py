@@ -26,7 +26,7 @@ class SurveyTestCase(unittest.TestCase):
         self.assertEqual(self.survey.age_groups[3].low, 51)
         self.assertEqual(self.survey.age_groups[3].high, 123)
 
-    def test_add_person(self):
+    def test_func_add_person(self):
         person = Person("Иванов Иван Иванович", 23)
         self.survey.add_person(person)
 
